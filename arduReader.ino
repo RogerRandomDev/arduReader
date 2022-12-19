@@ -1,5 +1,8 @@
-
+//save shutdown helper
+bool shutdown=false;
+bool fullRefresh=false;
 bool doUpdate=true;
+#include "charged.h"
 #include "display.h"
 
 #include "input.h"
@@ -19,33 +22,30 @@ const uint16_t pageItems=10;
 
 //run when first booting
 void setup() {
-  Serial.begin(115200);
   //preps buttons and inputs
   initButtons();
   //preps display and settings for use
   prepDisplay();
   //will set up once i have the module
   //loadSD();
+  Serial.end();
 }
 //scenes
 //0=menu
 //1=file
 int curScene=0;
 void loop() {
+  //stops anything fragile from happening when power is low
+  if(shutdown){drawLowPower();return;}
+  if(doUpdate){    
+    doUpdate=false;
+    moveSelect(_moveBy);
+    _moveBy=0;
+    updateMenu();
+    fullRefresh=false;
+  }
+  delay(200);
   
-  updateTriggers();
-  //only updates on changes
-  if(doUpdate){
-    switch(curScene){
-      case(0):updateMenu();break;
-      //should be updatePage or something
-      case(1):updateMenu();break;
-    }
-    disablePressed();
-    doUpdate=false;}
-    
-  //sleep until interrupt recieved from user input
-  delay(50);
 }
 
 

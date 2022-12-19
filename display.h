@@ -33,11 +33,9 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 
 
 
-
-
-
 //boot screen for when first powering on
 void bootScreen() {
+  fullWipe();
   display.setFullWindow();
   display.setTextSize(2);
   char bootSplash[]="arduReader";
