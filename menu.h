@@ -93,6 +93,8 @@ void updateMenu() {
   //updates the page
   display.display(true);
   //refreshes the whole page to remove ghosting if you have triggered it
-  //if(fullRefresh){fullRefresh=false;display.refresh();}
+  if(fullRefresh){display.refresh();}
+  fullRefresh=false;
+  
 }
 

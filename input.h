@@ -3,21 +3,25 @@
 //pin ids
 //format is UP,DOWN,CONFIRM,REFRESH
 int buttonPins[4]={4,3,6,2};
-int _moveBy=0;
+volatile int _moveBy=0;
 
 //button events
 
 void buttonPressed(){
-  _moveBy=0;doUpdate=false;
+  doUpdate=false;int baseMoveBy=_moveBy;_moveBy=0;
+  bool willUpdate=false;
   for(int i=0;i<4;i++){
     bool pressed=digitalRead(buttonPins[i])==LOW;
-    doUpdate=pressed||doUpdate;
+    willUpdate=willUpdate||pressed;
     if(pressed){
       _moveBy+=int(i<2)*(i*2-1);
       fullRefresh=fullRefresh||i==3;
         
     } 
+    
   }
+  if(_moveBy==0){_moveBy=baseMoveBy;}
+  doUpdate=willUpdate;
 }
 
 

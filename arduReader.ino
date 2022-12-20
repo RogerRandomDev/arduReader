@@ -1,7 +1,7 @@
 //save shutdown helper
 bool shutdown=false;
-bool fullRefresh=false;
-bool doUpdate=true;
+volatile bool fullRefresh=false;
+volatile bool doUpdate=true;
 #include "charged.h"
 #include "display.h"
 
@@ -28,7 +28,6 @@ void setup() {
   prepDisplay();
   //will set up once i have the module
   //loadSD();
-  Serial.end();
 }
 //scenes
 //0=menu
@@ -37,13 +36,13 @@ int curScene=0;
 void loop() {
   //stops anything fragile from happening when power is low
   if(shutdown){drawLowPower();return;}
+  
   if(doUpdate){    
-    doUpdate=false;
-    moveSelect(_moveBy);
-    _moveBy=0;
+    if(_moveBy!=0){moveSelect(_moveBy);}
+    _moveBy=0;fullRefresh=false;doUpdate=false;
     updateMenu();
-    fullRefresh=false;
   }
+  doUpdate=false;
   delay(200);
   
 }
